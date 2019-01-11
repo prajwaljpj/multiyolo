@@ -23,5 +23,5 @@ class consumer(mp.Process):
 if __main__ == "__name__":
     tasks = multiprocessing.JoinableQueue()
     results = multiprocessing.Queue()
-
-    streams = [os.]
+    streamer = Streamer(folder_path)
+    streams = mp.Process(Streamer.get_files, )
