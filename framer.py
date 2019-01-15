@@ -17,11 +17,19 @@ class frame_generator(object):
 
 
 class consumer(mp.Process):
-    def __init__jjjA
+    def __init__(self):
+        pass
+
+class Streamer():
+    def __init__(self, folder_path, stream_set):
+        self.folder_path = folder_path
 
 
-if __main__ == "__name__":
-    tasks = multiprocessing.JoinableQueue()
+
     results = multiprocessing.Queue()
     streamer = Streamer(folder_path)
-    streams = mp.Process(Streamer.get_files, )
+    streams = mp.Process(Streamer.get_files)
+
+    streams.start()
+
+

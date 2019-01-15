@@ -5,7 +5,6 @@ import sys
 import glob
 import cv2
 from yolov3 import YOLOV3
-yv3 = YOLOV3("cfg/yolo_2k_reanchored.cfg", "weights/yolo_2k_reanchored_70000.weights", "cfg/2k_aug.data")
 # yolov3 = YOLOV3("cfg/yolo_2k_reanchored.cfg", "weights/yolo_2k_reanchored_70000.weights", "cfg/2k_aug.data")
 
 
@@ -38,14 +37,14 @@ class yolo_load(mp.Process):
                         self.yolo_result_q.put(results)
 
 class yolo_task(object):
-        def __init__(self, stream_id, lock):
+        def __init__(self, stream_id, lock, yv3):
                 #provide yolo arguments
                 self.lock = lock
                 self.stream_id = stream_id
                 # self.capture = cv2.VideoCapture(stream_id)
 
-        def analytics(self):
-                global yv3
+        @classmethod
+        def analytics(yolo_task):
                 # read from stream_id
                 print("initiating video capture")
                 capture = cv2.VideoCapture(self.stream_id)
@@ -53,7 +52,7 @@ class yolo_task(object):
                 results_set_for_video = []
                 while success:
                         with self.lock:
-                                out_scores, out_boxes, out_classes = yv3.detect_image(yolo_frame)
+                                out_scores, out_boxes, out_classes = yolo_task.yv3.detect_image(yolo_frame)
                         results_set_for_video.append((out_scores, out_boxes, out_classes))
                         success , yolo_frame = capture.read()
                         print(results_set_for_video)
@@ -79,6 +78,7 @@ if __name__ == '__main__':
         results = mp.Queue()
         filepath = sys.argv[1]
 
+        yv3 = YOLOV3("cfg/yolo_2k_reanchored.cfg", "weights/yolo_2k_reanchored_70000.weights", "cfg/2k_aug.data")
         # fchkr = folder_checker()
         #start consumers
         # number_consumers = mp.cpu_count() * 2
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         streams = glob.glob(os.path.join(filepath, '*'))
 
         for strm in streams:
-                tasks.put(yolo_task(strm, lock))
+                tasks.put(yolo_task(strm, lock, yv3))
         for i in range(number_consumers):
                 tasks.put(None)
         tasks.join()
