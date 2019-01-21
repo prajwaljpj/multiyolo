@@ -24,8 +24,10 @@ class Streamer():
     def __init__(self, folder_path, stream_set):
         self.folder_path = folder_path
 
+    def get_files(self):
 
 
+if __name__ == '__main__':
     results = multiprocessing.Queue()
     streamer = Streamer(folder_path)
     streams = mp.Process(Streamer.get_files)
