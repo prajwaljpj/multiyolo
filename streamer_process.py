@@ -103,6 +103,6 @@ if __name__=='__main__':
             continue
         else:
             pass
-            
+
     for i in range(n):
         print(myResults.get())
