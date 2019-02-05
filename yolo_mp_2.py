@@ -41,6 +41,8 @@ def yolo_task(stream_id, yolov3, lock):
         #print(result_set_for_video)
     return (stream_id, result_set_for_video)
 
+
+
 if __name__=="__main__":
     m = mp.Manager()
     lock = m.Lock()
