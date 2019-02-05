@@ -9,13 +9,14 @@ import os
 import multiprocessing
 import glob
 import time
+import configparser
 
 class Streamer():
     
     def __init__(self, directory):
         self.directory = directory
     
-    def simpler(self, l, stream_name, latest_files, wait):
+    def simpler(self, l, stream_name, latest_files, wait, list_length):
         known_latest = []           #
         print(multiprocessing.current_process())
         path = stream_name.get()
@@ -53,8 +54,13 @@ class Streamer():
             pass
 
 if __name__=='__main__':
-    path_to_rec = "/mnt/f/IISc_Big/recordings"
-    wait = 1
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    path_to_rec = config["DEFAULT"]["path_to_rec"]
+    wait = int(config["DEFAULT"]["wait_time"])
+    list_length = int(config["DEFAULT"]["list_length"])
+
     streamer = Streamer(path_to_rec)
     myStreams = multiprocessing.Queue()
     myResults = multiprocessing.Queue()
@@ -66,8 +72,9 @@ if __name__=='__main__':
     workers = []
     processes = {}
     m=0
+    
     for i in range(n):
-        work = multiprocessing.Process(target=streamer.simpler, args=(lock, myStreams, myResults, wait))
+        work = multiprocessing.Process(target=streamer.simpler, args=(lock, myStreams, myResults, wait, list_length))
         work.start()
         processes[n] = (work, i)
         m+=1
