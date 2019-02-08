@@ -73,7 +73,7 @@ if __name__ == '__main__':
         mp.set_start_method('spawn')
         # establish queues
         m = mp.Manager()
-        lock = m.Lock()
+        lock = mp.Lock()
         tasks = mp.JoinableQueue()
         results = mp.Queue()
         filepath = sys.argv[1]
