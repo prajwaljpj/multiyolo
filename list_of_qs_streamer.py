@@ -53,27 +53,25 @@ class Streamer():
 		toggle.clear()
 		return
 
-	def indefinite_checker(self, n, final_q):
-		# multiprocessing.current_process().name = path
+	def indefinite_checker(self, streams, n, final_q):
+		multiprocessing.current_process().name = "indefinite checker"
 		print(multiprocessing.current_process())
 		try:
 			while True:
-				new_len = len(os.listdir(self.directory))
+				newstreams = os.listdir(self.directory)
+				newstreams = [self.directory+"/"+'{}'.format(element) for element in newstreams]
 				new_workers = []
-				if new_len > n:
-					for i in range(n,new_len):
-						final_q.append(multiprocessing.Queue())
-						myStreams = os.listdir(self.directory)
-						myStreams = [path_to_rec+"/"+'{}'.format(element) for element in myStreams]
-						work = multiprocessing.Process(target=self.simpler, args=(myStreams[i],final_q[i], wait, list_length)) 
-						work.start()
-						new_workers.append(work)
-						break
-				else:
-					# print("elsed fine")
-					pass
+				for i, name in enumerate(list(set(newstreams)^set(streams))):
+					streams=newstreams
+					print("new stream detected.")
+					time.sleep(1)
+					final_q.append(multiprocessing.Queue())
+					work = multiprocessing.Process(target=self.simpler, args=(name,final_q[n+i], self.wait, self.list_length)) 
+					work.start()
+					new_workers.append(work)
+					break
 		except KeyboardInterrupt:
-			print("checking stopped, by user")
+			print("checking stopped by user")
 
 	def execute(self):
 		myStreams = os.listdir(self.directory)
@@ -98,7 +96,7 @@ class Streamer():
 			m+=1
 			workers.append(work)
 
-		checker = multiprocessing.Process(target=self.indefinite_checker, args=(n, final_q))
+		checker = multiprocessing.Process(target=self.indefinite_checker, args=(myStreams,n, final_q))
 		checker.start()
 		
 		# for each in workers:
