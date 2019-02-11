@@ -15,6 +15,7 @@ class framer(mp.Process):
         print("Run initiated for proc: {}".format(proc_name))
         while True:
             stream_name, next_file = self.input_queue.get()
+            print("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf: ", stream_name)
             if next_file is None:
                 print("Exiting stream in {}".format(proc_name))
                 self.input_queue.task_done()
@@ -26,7 +27,7 @@ class framer(mp.Process):
                     continue
                 # print(frame)
                 self.output_queue.put((stream_name, frame),)
-            self.input_queue.task_done()
+            # self.input_queue.task_done()
             return
 
 
@@ -34,14 +35,14 @@ class frame_generator(object):
     def __init__(self, input_data):
         print("Initialised frame_generator (should happen only once)")
         self.filename = input_data
-        self.cap = cv2.VideoCapture(self.filename)
         print("filename: {}".format(self.filename))
 
     def __iter__(self):
         print("iter obj happen only once")
+        cap = cv2.VideoCapture(self.filename)
         ret = True
         while ret:
-            ret, frame = self.cap.read()
+            ret, frame = cap.read()
             yield frame
 
 
@@ -52,8 +53,8 @@ def fmr(inqueue, outqueue):
     print(consumers)
     [w.start() for w in consumers]
     # while True:
-    #     print(outqueue[0].get())
-    return
+        # print(outqueue[0].get())
+    return inqueue, outqueue
     # return (inqueue, outqueue)
 
 if __name__ == '__main__':
