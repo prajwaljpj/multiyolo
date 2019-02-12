@@ -15,9 +15,10 @@ class framer(mp.Process):
         print("Run initiated for proc: {}".format(proc_name))
         while True:
             stream_name, next_file = self.input_queue.get()
+            print("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf: ", stream_name)
             if next_file is None:
                 print("Exiting stream in {}".format(proc_name))
-                self.input_queue.task_done()
+                # self.input_queue.task_done()
                 break
             print(proc_name, next_file)
             frames_gen = frame_generator(next_file)
@@ -26,8 +27,8 @@ class framer(mp.Process):
                     continue
                 # print(frame)
                 self.output_queue.put((stream_name, frame),)
-            self.input_queue.task_done()
-            return
+            # self.input_queue.task_done()
+        return
 
 
 class frame_generator(object):
@@ -52,7 +53,7 @@ def fmr(inqueue, outqueue):
     print(consumers)
     [w.start() for w in consumers]
     # while True:
-    #     print(outqueue[0].get())
+        # print(outqueue[0].get())
     return
     # return (inqueue, outqueue)
 
