@@ -61,9 +61,9 @@ if __name__ == '__main__':
 
     #stream_ids = os.listdir(videos_path)
     streams = 2
-
-    framer_result = [mp.Queue() for stream in range(streams)]
-    inqueuelist = [mp.Queue() for stream in range(streams)]
+    manager = mp.Manager()
+    framer_result = [manger.Queue() for stream in range(streams)]
+    inqueuelist = [manger.Queue() for stream in range(streams)]
     inqueuelist[0].put(('stream1', '/home/prajwaljpj/projects/multiyolo/video/bakvid/20180818_0100_16-18-20.mp4'))
     inqueuelist[0].put(('stream1', '/home/prajwaljpj/projects/multiyolo/video/bakvid/20180818_0100_16-18-21.mp4'))
     inqueuelist[1].put(('stream2', '/home/prajwaljpj/projects/multiyolo/video/bakvid/20180818_0100_16-18-22.mp4'))
