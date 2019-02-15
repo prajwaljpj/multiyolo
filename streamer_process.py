@@ -2,7 +2,7 @@
 """
 Created on Sun Feb  3 18:41:07 2019
 
-@author: Armaan Puri 
+@author: Armaan Puri
 """
 
 import os
@@ -12,15 +12,15 @@ import time
 import configparser
 
 class Streamer():
-    
+
     def __init__(self, directory):
         self.directory = directory
-    
+
     def simpler(self, l, stream_name, latest_files, wait, list_length):
         known_latest = []           #
         print(multiprocessing.current_process())
         path = stream_name.get()
-        # count = 0   
+        # count = 0
         try:
             while True:
                 newest_file = max(glob.glob(path+"/*"), key=os.path.getctime)
@@ -68,18 +68,18 @@ if __name__=='__main__':
     for stream in glob.glob(os.path.join(path_to_rec+"/*")):
         myStreams.put(stream)
     # workers = [multiprocessing.Process(target=streamer.latest_provider, args=(lock, myStreams, myResults)) for i in range(n)]
-    n = len(os.listdir(streamer.directory))  # for each stream, a process would be started 
+    n = len(os.listdir(streamer.directory))  # for each stream, a process would be started
     workers = []
     processes = {}
     m=0
-    
+
     for i in range(n):
         work = multiprocessing.Process(target=streamer.simpler, args=(lock, myStreams, myResults, wait, list_length))
         work.start()
         processes[n] = (work, i)
         m+=1
         workers.append(work)
-    
+
     # for each in workers:
     #     print("Let's join workers")
     #     each.join()
@@ -97,7 +97,7 @@ if __name__=='__main__':
     #         else:
     #             print (a, 'finished')
     #             p.join() # Allow tidyup
-    #             del processes[x] # Removed finished items from the dictionary 
+    #             del processes[x] # Removed finished items from the dictionary
     #             # When none are left then loop will end
 
     # for worker in workers:

@@ -32,7 +32,6 @@ if __name__ == '__main__':
 
     streams = 2
     framer_queues = [manager.Queue() for stream in range(streams)]
-
     yolo_out_queues = [manager.Queue() for stream in range(streams)]
 
     yolov3 = YOLOV3("cfg/yolo_2k_reanchored.cfg", "weights/yolo_2k_reanchored_70000.weights", "cfg/2k_aug.data")
