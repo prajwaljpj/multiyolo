@@ -126,8 +126,11 @@ def call_streamer():
 	streamer = Streamer(config["DEFAULT"]["path_to_rec"], int(config["DEFAULT"]["wait_time"]), int(config["DEFAULT"]["list_length"]), multiprocessing.Manager().list())
 	signal.signal(signal.SIGTSTP, streamer.handler)
 	streamer.execute()
+	return streamer.final_q
+
 
 	# print(streamer.final_q) ## streamer.final_q is the list of queues	
 
 if __name__=='__main__':
-	call_streamer()
+	qs = call_streamer()
+	print(qs)
